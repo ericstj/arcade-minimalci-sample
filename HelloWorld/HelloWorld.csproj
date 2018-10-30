@@ -7,8 +7,8 @@
     <AssemblyName>HelloWorld</AssemblyName>
   </PropertyGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <ProjectReference Condition="$(TargetFramework.StartsWith('net4'))" Include="..\CppCliClassLibrarySample\CppCliClassLibrarySample.vcxproj" />
-  </ItemGroup>
+  </ItemGroup>-->
 
 </Project>
