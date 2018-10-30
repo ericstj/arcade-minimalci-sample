@@ -6,10 +6,4 @@
     <IsPackable>true</IsPackable>
     <AssemblyName>HelloWorld</AssemblyName>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="HelloWorld_Cpp.vcxproj">
-        <ExcludeFromPublishPackageReferences>true</ExcludeFromPublishPackageReferences>
-    </ProjectReference>
-  </ItemGroup>
 </Project>
