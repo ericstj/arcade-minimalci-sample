@@ -21,7 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{49CB64E9-7ECB-4210-8D07-9597705FE674}</ProjectGuid>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkIdentifier>.NETCoreApp</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v3.0.0</TargetFrameworkVersion>
     <Keyword>ManagedCProj</Keyword>
     <RootNamespace>HelloWorldCppCli</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
@@ -152,11 +153,31 @@
     <Image Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <!-- Bring in all the .NETCore reference asssemblies from a C# project -->
+    <ProjectReference Include="..\HelloWorld\HelloWorld.csproj">
+      <Properties>TargetFramework=netcoreapp3.0</Properties>
+      <Targets>ResolveAssemblyReferences2</Targets>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  
+  <!-- may not be required for /clr:netcore -->
+  <Target Name="SetMscorlibAdditionalUsingDirectory" 
+          Condition="'$(SetMscorlibAdditionalUsingDirectory)' != 'true'"
+          AfterTargets="ResolveAssemblyReferences">
+    <PropertyGroup>
+      <_mscorlibDirectory Condition="'%(ReferencePath.FileName)%(ReferencePath.Extension)' == 'mscorlib.dll'">%(ReferencePath.RootDir)%(ReferencePath.Directory)</_mscorlibDirectory>
+    </PropertyGroup>
+    <Error Condition="'$(_mscorlibDirectory)' == ''" Text="Could not locate mscorlib.dll" />
+    <ItemGroup>
+      <CLCompile>
+        <AdditionalUsingDirectories>%(CLCompile.AdditionalIncludeDirectories);$(_mscorlibDirectory)</AdditionalUsingDirectories>
+      </CLCompile>
+    </ItemGroup>
+  </Target>
+  
+  <!-- Disable the portions of MSBuild that insist on a targeting pack directory to represent a target framework -->
+  <Import Project="..\targets\Microsoft.NET.DisableStandardFrameworkResolution.targets" Sdk="Microsoft.NET.Sdk" />
 </Project>
